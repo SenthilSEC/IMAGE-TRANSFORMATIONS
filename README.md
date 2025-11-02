@@ -1,7 +1,8 @@
 # IMAGE-TRANSFORMATIONS
+# Name:P.Senthil Arunachalam
+# Reg No:212224240147
 
-
-## Aim
+## Aim:
 To perform image transformation such as Translation, Scaling, Shearing, Reflection, Rotation and Cropping using OpenCV and Python.
 
 ## Software Required:
@@ -9,155 +10,261 @@ Anaconda - Python 3.7
 
 ## Algorithm:
 ### Step1:
-Import necessary libraries such as OpenCV, NumPy, and Matplotlib for image processing and visualization.
+Import numpy module as np and pandas as pd.
 
 ### Step2:
-Read the input image using cv2.imread() and store it in a variable for further processing.
+Assign the values to variables in the program.
 
 ### Step3:
-Apply various transformations like translation, scaling, shearing, reflection, rotation, and cropping by defining corresponding functions:
-
-1.Translation moves the image along the x or y-axis. 2.Scaling resizes the image by scaling factors. 3.Shearing distorts the image along one axis. 4.Reflection flips the image horizontally or vertically. 5.Rotation rotates the image by a given angle.
-
+Get the values from the user appropriately.
 ### Step4:
-Display the transformed images using Matplotlib for visualization. Convert the BGR image to RGB format to ensure proper color representation.
-
+Continue the program by implementing the codes of required topics.
 ### Step5:
-Save or display the final transformed images for analysis and use plt.show() to display them inline in Jupyter or compatible environments.
-
+Thus the program is executed in google colab.
 ## Program:
-```python
-Developed By:P.Senthil Arunachalam
-Register Number:212224240147
 ```
+# Name:P.Senthil Arunachalam
+# Reg No:212224240147
+```
+### i)Image Translation
+```PYTHON
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
 
-# import the libraries
+# Read the input image
+input_image = cv2.imread("cat.jpg")
 
+# Convert from BGR to RGB so we can plot using matplotlib
+input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+
+# Disable x & y axis
+plt.axis('off')
+
+# Show the image
+plt.imshow(input_image)
+plt.show()
+
+# Get the image shape
+rows, cols, dim = input_image.shape
+
+# Transformation matrix for translation
+M = np.float32([[1, 0, 100],
+                [0, 1, 200],
+                [0, 0, 1]])  # Fixed the missing '0' and added correct dimensions
+
+# Apply a perspective transformation to the image
+translated_image = cv2.warpPerspective(input_image, M, (cols, rows))
+
+# Disable x & y axis
+plt.axis('off')
+
+# Show the resulting image
+plt.imshow(translated_image)
+plt.show()
+
+```
+### ii) Image Scaling
+```PYTHON
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-# Load the image and check if it's loaded correctly
-input_img = cv2.imread("dog.jpg")
-if input_img is None:
-    print("Error: Image not found.")
-else:
-    input_img = cv2.cvtColor(input_img, cv2.COLOR_BGR2RGB)
+from matplotlib import pyplot as plt
 
-#Display the image
-plt.figure(figsize=(8, 8))  # Optional: adjust size for better clarity
-plt.axis('off')
-plt.imshow(input_img)
-plt.title("Original Image")
-plt.tight_layout()  # Optional: makes sure layout is tight
-plt.show()
+# Function to display images in Colab
+def show_image(image):
+    plt.figure(figsize=(6, 6))
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    plt.show()
 
-<Figure size 800x800 with 1 Axes><img width="790" height="553" alt="image" src="https://github.com/user-attachments/assets/080ee9ef-1278-444b-86ea-b2007bbd97de" />
- 
-# Get image dimensions
- 
-rows, cols, dim = input_img.shape
+# Load an image from URL or file path
+image_url = 'nature.jpg'  # Replace with your image URL or file path
+image = cv2.imread(image_url)
 
-# Define translation matrix
+# Define scale factors
+scale_x = 1.5  # Scaling factor along x-axis
+scale_y = 1.5  # Scaling factor along y-axis
 
-translation_x = 50  # Move 50 pixels to the right
-translation_y = 50  # Move 50 pixels down
-M = np.float32([[1, 0, translation_x], [0, 1, translation_y]])
+# Apply scaling to the image
+scaled_image = cv2.resize(image, None, fx=scale_x, fy=scale_y, interpolation=cv2.INTER_LINEAR)
 
-# Perform the translation
+# Display original and scaled images
+print("Original Image:")
+show_image(image)
+print("Scaled Image:")
+show_image(scaled_image)
+```
 
-translated_img = cv2.warpAffine(input_img, M, (cols, rows))
+### iii) Image shearing
+```PYTHON
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
 
-# Display the translated image
+# Function to display images in Colab
+def show_image(image):
+    plt.figure(figsize=(6, 6))
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    plt.show()
 
-plt.axis('off')
-plt.imshow(translated_img)
-plt.title("Translated Image")
-plt.show()
+# Load an image from URL or file path
+image_url = '3nat.jpg'  # Replace with your image URL or file path
+image = cv2.imread(image_url)
 
-<Figure size 640x480 with 1 Axes><img width="515" height="370" alt="image" src="https://github.com/user-attachments/assets/687f28a2-f8c8-4860-838a-f752f3e63d05" />
+# Define shear parameters
+shear_factor_x = 0.5  # Shear factor along x-axis
+shear_factor_y = 0.2  # Shear factor along y-axis
 
-# Perform scaling with different scaling factors for x and y axes
+# Define shear matrix
+shear_matrix = np.float32([[1, shear_factor_x, 0], [shear_factor_y, 1, 0]])
 
-fx, fy = 1.5, 2.0  # Scaling factors
-scaled_img = cv2.resize(input_img, None, fx=fx, fy=fy, interpolation=cv2.INTER_LINEAR)
+# Apply shear to the image
+sheared_image = cv2.warpAffine(image, shear_matrix, (image.shape[1], image.shape[0]))
 
-# Show the scaled image
+# Display original and sheared images
+print("Original Image:")
+show_image(image)
+print("Sheared Image:")
+show_image(sheared_image)
+```
+### iv) Image Reflection
+```PYTHON
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
 
-plt.axis('off')
-plt.imshow(scaled_img)
-plt.title("Scaled Image")
-plt.show()
+# Function to display images in Colab
+def show_image(image):
+    plt.figure(figsize=(6, 6))
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    plt.show()
 
-<Figure size 640x480 with 1 Axes><img width="435" height="409" alt="image" src="https://github.com/user-attachments/assets/c039fd4a-a787-447b-9f3b-db5e91b67511" />
-    
-# Shearing in X-axis
+# Load an image from URL or file path
+image_url = '4 nature.jpg'  # Replace with your image URL or file path
+image = cv2.imread(image_url)
 
-shear_factor_x = 0.5  # Shear factor for X-axis
-M_x = np.float32([[1, shear_factor_x, 0], [0, 1, 0]])
+# Reflect the image horizontally
+reflected_image_horizontal = cv2.flip(image, 1)
 
-# Apply shearing
-sheared_img_xaxis = cv2.warpAffine(input_img, M_x, (int(cols + shear_factor_x * rows), rows))
+# Reflect the image vertically
+reflected_image_vertical = cv2.flip(image, 0)
 
-# Display the sheared image
+# Reflect the image both horizontally and vertically
+reflected_image_both = cv2.flip(image, -1)
 
-plt.axis('off')
-plt.title("Sheared X-axis")
-plt.imshow(sheared_img_xaxis)
+# Display original and reflected images
+print("Original Image:")
+show_image(image)
+print("Reflected Horizontally:")
+show_image(reflected_image_horizontal)
+print("Reflected Vertically:")
+show_image(reflected_image_vertical)
+print("Reflected Both:")
+show_image(reflected_image_both)
+```
+### v) Image Rotation
+```PYTHON
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
 
-<Figure size 640x480 with 1 Axes><img width="515" height="288" alt="image" src="https://github.com/user-attachments/assets/4e22b34c-7500-4214-8a89-890d4b30dab1" />
+# Function to display images in Colab
+def show_image(image):
+    plt.figure(figsize=(6, 6))
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    plt.show()
 
-# Flip image along the X-axis (vertical reflection)
+# Load an image from URL or file path
+image_url = 'nat5.jpg'  # Replace with your image URL or file path
+image = cv2.imread(image_url)
 
-reflected_img_xaxis = cv2.flip(input_img, 0)
+# Define rotation angle in degrees
+angle = 45
 
-# Display the reflected image
+# Get image height and width
+height, width = image.shape[:2]
 
-plt.axis("off")
-plt.title("Reflected (X-axis)")
-plt.imshow(reflected_img_xaxis)
+# Calculate rotation matrix
+rotation_matrix = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1)
 
-<Figure size 640x480 with 1 Axes><img width="515" height="370" alt="image" src="https://github.com/user-attachments/assets/8dec603a-ce61-4032-bec5-7079b84d3ec5" />
+# Perform image rotation
+rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height))
 
-# Get image dimensions
+# Display original and rotated images
+print("Original Image:")
+show_image(image)
+print("Rotated Image:")
+show_image(rotated_image)
+```
 
-rows, cols = input_img.shape[:2]
+### vi) Image Cropping
 
-# Define rotation center, angle, and scale
+```PYTHON
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
 
-center = (cols // 2, rows // 2)
-angle = 45  # Rotation angle in degrees
-scale = 1.0  # Scale factor (1.0 means no scaling)
+# Function to display images in Colab
+def show_image(image):
+    plt.figure(figsize=(6, 6))
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    plt.show()
 
-# Get the rotation matrix
+# Load an image from URL or file path
+image_url = '6nat.jpg'  # Replace with your image URL or file path
+image = cv2.imread(image_url)
 
-M = cv2.getRotationMatrix2D(center, angle, scale)
+# Define cropping coordinates (x, y, width, height)
+x = 100  # Starting x-coordinate
+y = 50   # Starting y-coordinate
+width = 200  # Width of the cropped region
+height = 150  # Height of the cropped region
 
-# Apply the rotation
+# Perform image cropping
+cropped_image = image[y:y+height, x:x+width]
 
-rotated_img = cv2.warpAffine(input_img, M, (cols, rows))
+# Display original and cropped images
+print("Original Image:")
+show_image(image)
+print("Cropped Image:")
+show_image(cropped_image)
 
-# Display the rotated image
+```
 
-plt.axis('off')
-plt.title("Rotated Image (45°)")
-plt.imshow(rotated_img)
-plt.show()
 
-<Figure size 640x480 with 1 Axes><img width="515" height="370" alt="image" src="https://github.com/user-attachments/assets/fb334577-b0ed-4408-8bd2-42d7aa34973b" />
 
-# Define the cropping coordinates: top-left corner (x, y) and width (w), height (h)
-x, y, w, h = 400, 100, 1000, 500
+## Output:
+### i)Image Translation
 
-# Crop the image by slicing the array
-cropped_image = input_img[y:y+h, x:x+w]
+![translate dip](https://github.com/KRISHNARAJ-D/IMAGE-TRANSFORMATIONS/assets/119559695/3be1a93a-ade3-4517-856d-09f8cfaaf2a8)
 
-# Display the cropped image (convert to RGB for correct color representation)
-plt.imshow(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
-plt.title("Cropped Image")
-plt.axis('off')
-plt.show()
+### ii) Image Scaling
 
-<Figure size 640x480 with 1 Axes><img width="515" height="288" alt="image" src="https://github.com/user-attachments/assets/890f6ee7-9cba-4979-8a94-e0bb1529fc98" />
+
+![scaling](https://github.com/KRISHNARAJ-D/IMAGE-TRANSFORMATIONS/assets/119559695/6a8543be-d478-4250-a171-bff6db67bcbd)
+
+### iii)Image shearing
+
+![3 output](https://github.com/KRISHNARAJ-D/IMAGE-TRANSFORMATIONS/assets/119559695/e2d44c58-8850-48e4-a9aa-c7281c34d9b7)
+
+
+### iv)Image Reflection
+
+![4 out](https://github.com/KRISHNARAJ-D/IMAGE-TRANSFORMATIONS/assets/119559695/669f6fcc-ba87-473f-8b0a-2d87c6fe52e2)
+
+
+### v)Image Rotation
+
+![5 output dip](https://github.com/KRISHNARAJ-D/IMAGE-TRANSFORMATIONS/assets/119559695/4b3ee990-1905-4bbd-b8a5-f285f0822d73)
+
+
+### vi)Image Cropping
+
+![6 out](https://github.com/KRISHNARAJ-D/IMAGE-TRANSFORMATIONS/assets/119559695/ecc572cc-288d-4c9d-9b18-998bc39b1a06)
 
 ## Result: 
 
